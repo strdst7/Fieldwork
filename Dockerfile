@@ -1,7 +1,8 @@
 # ---- build stage -----------------------------------------------------------
-# Debian slim is used instead of Alpine: Rollup's native parser is built for
-# glibc, and on musl it falls back to a wasm path that fails on react-dom
-# ("Code is nested too deeply").
+# Debian slim for the build stage because Rollup's native parser is a per-libc
+# optional dependency (@rollup/rollup-linux-x64-gnu vs -musl). Alpine builds work
+# when the install includes it; a copied node_modules or an --omit=optional
+# install is what leaves Rollup without a parser and stops the build.
 FROM node:22-bookworm-slim AS build
 
 WORKDIR /app
